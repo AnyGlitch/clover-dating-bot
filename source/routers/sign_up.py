@@ -33,8 +33,8 @@ sign_up_router = Router(name="Sign Up Router")
 
 @sign_up_router.message(
     CommandStart(),
-    F.from_user.as_("user"),
     ~UserFilter(),
+    F.from_user.as_("user"),
 )
 async def start_handler(
     message: Message,

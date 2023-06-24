@@ -98,7 +98,7 @@ async def like_to_reciprocity_handler(
 @search_router.message(
     ReactionState.FOLLOWER,
     F.text == "👍",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def like_to_follower_handler(
     message: Message,
@@ -142,7 +142,7 @@ async def like_to_follower_handler(
 @search_router.message(
     ReactionState.FOLLOWER,
     F.text == "👎",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def dislike_to_follower_handler(
     message: Message,
@@ -168,7 +168,7 @@ async def dislike_to_follower_handler(
 @search_router.message(
     ReactionState.USER,
     F.text == "👍",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def like_to_user_handler(
     message: Message,
@@ -199,7 +199,7 @@ async def like_to_user_handler(
 @search_router.message(
     ReactionState.USER,
     F.text == "👎",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def dislike_to_user_handler(
     message: Message,
@@ -224,7 +224,7 @@ async def dislike_to_user_handler(
 @search_router.message(
     ReactionState.OTHER,
     F.text == "👍",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def like_to_other_handler(
     message: Message,
@@ -257,7 +257,7 @@ async def like_to_other_handler(
 @search_router.message(
     ReactionState.OTHER,
     F.text == "👎",
-    F.date.date().as_("date"),
+    F.date.as_("date"),
 )
 async def dislike_to_other_handler(
     message: Message,
