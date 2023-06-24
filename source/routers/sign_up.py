@@ -9,11 +9,17 @@ from pydantic import ValidationError
 from source.database.services import UserService
 from source.filters import UserFilter
 from source.helpers import EmojiHelper, LocationHelper
-from source.keyboards import location_keyboard, menu_keyboard, sex_keyboard
+from source.keyboards import (
+    empty_keyboard,
+    location_keyboard,
+    menu_keyboard,
+    sex_keyboard,
+)
 from source.messages import (
     age_message,
     location_message,
     location_not_found_message,
+    photo_message,
     photo_not_found_message,
     sex_message,
     start_message,
@@ -24,7 +30,7 @@ from source.states import SignUpState
 if TYPE_CHECKING:
     from aiogram import Bot
     from aiogram.fsm.context import FSMContext
-    from aiogram.types import Location, Message, User
+    from aiogram.types import Location, Message, PhotoSize, User
 
 __all__ = ["sign_up_router"]
 
@@ -45,17 +51,17 @@ async def start_handler(
     chat = await bot.get_chat(user.id)
     profile = await user.get_profile_photos(limit=1)
 
-    if not profile.photos:
-        await message.answer(photo_not_found_message)
-        return
+    photo = None
+    if photos := profile.photos:
+        size = photos[0][-1]
+        photo = size.file_id
 
-    photo = profile.photos[0][-1]
     await message.answer(start_message.format(name=user.first_name))
     await state.update_data(
         id=user.id,
         name=user.first_name,
         bio=chat.bio,
-        photo=photo.file_id,
+        photo=photo,
     )
     await state.set_state(SignUpState.AGE)
 
@@ -83,10 +89,31 @@ async def age_handler(message: Message, state: FSMContext, age: int) -> None:
     F.text.in_({"🙋‍♀️", "🙋‍♂️"}),
 )
 async def sex_handler(message: Message, state: FSMContext, emoji: str) -> None:
+    data = await state.get_data()
+
     sex = EmojiHelper.get_sex(emoji)
     need_sex = EmojiHelper.get_opposite_sex(emoji)
-    await message.answer(sex_message, reply_markup=location_keyboard)
+
+    if data["photo"]:
+        to_state = SignUpState.LOCATION
+        text, keyboard = sex_message, location_keyboard
+    else:
+        to_state = SignUpState.PHOTO
+        text, keyboard = photo_not_found_message, empty_keyboard  # type: ignore
+
+    await message.answer(text, reply_markup=keyboard)
     await state.update_data(sex=sex, need_sex=need_sex)
+    await state.set_state(to_state)
+
+
+@sign_up_router.message(SignUpState.PHOTO, F.photo.pop().as_("photo"))
+async def photo_handler(
+    message: Message,
+    state: FSMContext,
+    photo: PhotoSize,
+) -> None:
+    await message.answer(photo_message, reply_markup=location_keyboard)
+    await state.update_data(photo=photo.file_id)
     await state.set_state(SignUpState.LOCATION)
 
 
