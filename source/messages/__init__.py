@@ -1,5 +1,5 @@
 from source.messages.back import back_message
-from source.messages.me import get_me_message
+from source.messages.me import bad_photo_message, get_me_message
 from source.messages.search import (
     reaction_to_reciprocity_message,
     reaction_to_user_message,
@@ -40,6 +40,7 @@ __all__ = [
     "age_message",
     "age_settings_message",
     "back_message",
+    "bad_photo_message",
     "bio_settings_message",
     "change_age_message",
     "change_bio_message",
