@@ -4,6 +4,7 @@ from geopy.adapters import AioHTTPAdapter
 from geopy.extra.rate_limiter import AsyncRateLimiter
 from geopy.geocoders import Nominatim
 
+from source import __email__
 from source.types import Address
 
 __all__ = ["LocationHelper"]
@@ -13,7 +14,7 @@ class LocationHelper:
     @staticmethod
     async def get_address(latitude: float, longitude: float) -> Address:
         async with Nominatim(
-            user_agent="whyglitches@gmail",
+            user_agent=__email__,
             adapter_factory=AioHTTPAdapter,
         ) as geolocator:
             geocode = AsyncRateLimiter(geolocator.geocode, min_delay_seconds=5)

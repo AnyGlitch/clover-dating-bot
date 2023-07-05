@@ -2,6 +2,10 @@
 
 ## 0.1
 
+### 0.1.5
+
+- Fix user agent
+
 ### 0.1.4
 
 - Short start polling
