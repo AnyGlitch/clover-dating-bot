@@ -1,5 +1,3 @@
-import asyncio
-
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ChatType
 from aiogram.fsm.storage.redis import RedisStorage
@@ -19,7 +17,7 @@ from source.routers import (
 __all__ = ["main"]
 
 
-async def main() -> None:
+def main() -> None:
     bot = Bot(GROUP_TOKEN)
 
     storage = RedisStorage.from_url(REDIS_URL)
@@ -41,8 +39,8 @@ async def main() -> None:
         back_router,
     )
 
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    dp.run_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
