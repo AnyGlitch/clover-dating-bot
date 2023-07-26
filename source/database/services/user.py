@@ -11,7 +11,7 @@ from source.types import Reaction, Sex
 if TYPE_CHECKING:
     from source.types import Address
 
-__all__ = ["MODEL", "UserService"]
+__all__ = ["UserService"]
 
 MODEL: TypeAlias = UserModel
 

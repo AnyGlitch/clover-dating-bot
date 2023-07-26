@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
     from source.types import Reaction
 
-__all__ = ["MODEL", "ReactionService"]
+__all__ = ["ReactionService"]
 
 MODEL: TypeAlias = ReactionModel
 

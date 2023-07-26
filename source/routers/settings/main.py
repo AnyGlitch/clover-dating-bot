@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from aiogram.fsm.context import FSMContext
     from aiogram.types import Location, Message, PhotoSize
 
-    from source.database.services import USER_MODEL
+    from source.database.models import UserModel
 
 __all__ = ["main_settings_router"]
 
@@ -39,7 +39,7 @@ main_settings_router.message.filter(UserFilter())
 
 
 @main_settings_router.message(F.text == "🧩Основное")
-async def main_settings_handler(message: Message, user: USER_MODEL) -> None:
+async def main_settings_handler(message: Message, user: UserModel) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
     await message.answer(
         main_settings_message,
@@ -66,7 +66,7 @@ async def name_settings_handler(message: Message, state: FSMContext) -> None:
 async def change_name_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     new_name: str,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
@@ -97,7 +97,7 @@ async def bio_settings_handler(message: Message, state: FSMContext) -> None:
 async def change_bio_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     new_bio: str,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
@@ -127,7 +127,7 @@ async def photo_settings_handler(message: Message, state: FSMContext) -> None:
 async def change_photo_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     new_photo: PhotoSize,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
@@ -158,7 +158,7 @@ async def age_settings_handler(message: Message, state: FSMContext) -> None:
 async def change_age_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     new_age: int,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
@@ -178,7 +178,7 @@ async def change_age_handler(
 @main_settings_router.message(F.text.as_("emoji"), F.text.in_({"🙋‍♀️", "🙋‍♂️"}))
 async def change_sex_handler(
     message: Message,
-    user: USER_MODEL,
+    user: UserModel,
     emoji: str,
 ) -> None:
     new_sex = EmojiHelper.get_opposite_sex(emoji)
@@ -198,7 +198,7 @@ async def change_sex_handler(
 @main_settings_router.message(F.location.as_("location"))
 async def change_location_handler(
     message: Message,
-    user: USER_MODEL,
+    user: UserModel,
     location: Location,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)

@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from aiogram.fsm.context import FSMContext
     from aiogram.types import Message
 
-    from source.database.services import USER_MODEL
+    from source.database.models import UserModel
 
 __all__ = ["filter_settings_router"]
 
@@ -36,7 +36,7 @@ filter_settings_router.message.filter(UserFilter())
 
 
 @filter_settings_router.message(F.text == "🔎Фильтры")
-async def filter_settings_handler(message: Message, user: USER_MODEL) -> None:
+async def filter_settings_handler(message: Message, user: UserModel) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.need_sex)
     await message.answer(
         filter_settings_message,
@@ -61,7 +61,7 @@ async def need_age_settings_handler(
 async def change_need_age_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     new_need_age: int,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.need_sex)
@@ -96,7 +96,7 @@ async def need_sex_settings_handler(
 async def change_sex_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     emoji: str,
 ) -> None:
     new_need_sex = EmojiHelper.get_sex(emoji[1:])

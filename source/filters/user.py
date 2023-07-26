@@ -9,13 +9,13 @@ from source.database.services import UserService
 if TYPE_CHECKING:
     from aiogram.types import Message
 
-    from source.database.services import USER_MODEL
+    from source.database.models import UserModel
 
 __all__ = ["UserFilter"]
 
 
 class UserFilter(Filter):
-    async def __call__(self, message: Message) -> bool | dict[str, USER_MODEL]:
+    async def __call__(self, message: Message) -> bool | dict[str, UserModel]:
         from_user = message.from_user
         if not from_user:
             return False

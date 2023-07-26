@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from aiogram.fsm.context import FSMContext
     from aiogram.types import Message
 
-    from source.database.services import USER_MODEL
+    from source.database.models import UserModel
 
 __all__ = ["me_router"]
 
@@ -25,7 +25,7 @@ me_router = Router(name="Me Router")
 async def me_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
 ) -> None:
     try:
         await message.answer_photo(

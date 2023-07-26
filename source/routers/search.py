@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from aiogram.fsm.context import FSMContext
     from aiogram.types import Message
 
-    from source.database.services import USER_MODEL
+    from source.database.models import UserModel
 
 __all__ = ["search_router"]
 
@@ -38,7 +38,7 @@ search_router.message.filter(UserFilter())
 async def search_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
 ) -> None:
     next_user, reaction = await UserService.get_next_user_by_filters(user)
 
@@ -88,7 +88,7 @@ async def search_handler(
 async def like_to_reciprocity_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
 ) -> None:
     data = await state.get_data()
 
@@ -114,7 +114,7 @@ async def like_to_follower_handler(
     message: Message,
     state: FSMContext,
     bot: Bot,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
@@ -157,7 +157,7 @@ async def like_to_follower_handler(
 async def dislike_to_follower_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
@@ -184,7 +184,7 @@ async def like_to_user_handler(
     message: Message,
     state: FSMContext,
     bot: Bot,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
@@ -214,7 +214,7 @@ async def like_to_user_handler(
 async def dislike_to_user_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
@@ -240,7 +240,7 @@ async def like_to_other_handler(
     message: Message,
     state: FSMContext,
     bot: Bot,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
@@ -272,7 +272,7 @@ async def like_to_other_handler(
 async def dislike_to_other_handler(
     message: Message,
     state: FSMContext,
-    user: USER_MODEL,
+    user: UserModel,
     date: datetime.date,
 ) -> None:
     data = await state.get_data()
