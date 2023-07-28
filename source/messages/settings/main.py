@@ -1,33 +1,20 @@
 __all__ = [
-    "age_settings_message",
-    "bio_settings_message",
-    "change_age_message",
-    "change_bio_message",
-    "change_location_message",
-    "change_location_not_found_message",
-    "change_name_message",
-    "change_photo_message",
-    "change_sex_message",
+    "change_main_settings_message",
+    "get_age_settings_message",
+    "get_bio_settings_message",
+    "get_name_settings_message",
+    "get_photo_settings_message",
     "main_settings_message",
-    "name_settings_message",
-    "photo_settings_message",
 ]
 
-main_settings_message = "Что хочешь поменять?"
+main_settings_message = "Настрой анкету и покажи свою уникальность!"
 
-name_settings_message = "Я весь во внимании, отправь свое новое имя:"
-change_name_message = "Приятно познакомиться, {name}!"
+get_name_settings_message = "Я весь во внимании, отправь свое новое имя:"
 
-bio_settings_message = "Ух-ты, что-то новое придумал(а)?"
-change_bio_message = "Мог(ла) бы придумать что-нибудь и получше.."
+get_bio_settings_message = "Ух-ты, что-то новое придумал(а)?"
 
-photo_settings_message = "Давай посмотрим на тебя с новых ракурсов!"
-change_photo_message = "Не уверен, что это можно здесь показывать.."
+get_photo_settings_message = "Давай посмотрим на тебя с новых ракурсов!"
 
-age_settings_message = "Сколько тебе сейчас?"
-change_age_message = "Прекрасный возраст!"
+get_age_settings_message = "Сколько тебе сейчас?"
 
-change_sex_message = "Удивительно.."
-
-change_location_message = "Как прошло путешествие?"
-change_location_not_found_message = "Я не смог выяснить, куда ты отправился.."
+change_main_settings_message = "Анкета обновлена!"

@@ -16,12 +16,12 @@ from source.keyboards import (
     sex_keyboard,
 )
 from source.messages import (
-    age_message,
-    location_message,
-    location_not_found_message,
-    photo_message,
-    photo_not_found_message,
-    sex_message,
+    finish_message,
+    get_age_message,
+    get_location_message,
+    get_photo_message,
+    get_sex_message,
+    location_validation_error_message,
     start_message,
     start_to_run_message,
 )
@@ -57,6 +57,8 @@ async def start_handler(
         photo = size.file_id
 
     await message.answer(start_message.format(name=user.first_name))
+    await message.answer(get_age_message)
+
     await state.update_data(
         id=user.id,
         name=user.first_name,
@@ -78,7 +80,7 @@ async def start_to_run(message: Message, state: FSMContext) -> None:
     F.text.cast(int).in_(range(16, 33)),
 )
 async def age_handler(message: Message, state: FSMContext, age: int) -> None:
-    await message.answer(age_message, reply_markup=sex_keyboard)
+    await message.answer(get_sex_message, reply_markup=sex_keyboard)
     await state.update_data(age=age, need_age=age)
     await state.set_state(SignUpState.SEX)
 
@@ -96,10 +98,10 @@ async def sex_handler(message: Message, state: FSMContext, emoji: str) -> None:
 
     if data["photo"]:
         to_state = SignUpState.LOCATION
-        text, keyboard = sex_message, location_keyboard
+        text, keyboard = get_location_message, location_keyboard
     else:
         to_state = SignUpState.PHOTO
-        text, keyboard = photo_not_found_message, empty_keyboard  # type: ignore
+        text, keyboard = get_photo_message, empty_keyboard  # type: ignore
 
     await message.answer(text, reply_markup=keyboard)
     await state.update_data(sex=sex, need_sex=need_sex)
@@ -112,7 +114,7 @@ async def photo_handler(
     state: FSMContext,
     photo: PhotoSize,
 ) -> None:
-    await message.answer(photo_message, reply_markup=location_keyboard)
+    await message.answer(get_location_message, reply_markup=location_keyboard)
     await state.update_data(photo=photo.file_id)
     await state.set_state(SignUpState.LOCATION)
 
@@ -131,7 +133,7 @@ async def location_handler(
             location.longitude,
         )
     except ValidationError:
-        await message.answer(location_not_found_message)
+        await message.answer(location_validation_error_message)
         return
 
     await UserService.create(
@@ -145,5 +147,5 @@ async def location_handler(
         need_sex=data["need_sex"],
         address=address,
     )
-    await message.answer(location_message, reply_markup=menu_keyboard)
+    await message.answer(finish_message, reply_markup=menu_keyboard)
     await state.clear()

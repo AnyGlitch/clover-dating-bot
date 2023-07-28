@@ -13,7 +13,7 @@ from source.messages import (
     get_me_message,
     reaction_to_reciprocity_message,
     reaction_to_user_message,
-    search_not_found_message,
+    search_not_found_error_message,
 )
 from source.states import ReactionState
 from source.types import Reaction
@@ -44,7 +44,7 @@ async def search_handler(
 
     if not (next_user and reaction):
         await message.answer(
-            search_not_found_message,
+            search_not_found_error_message,
             reply_markup=menu_keyboard,
         )
         return

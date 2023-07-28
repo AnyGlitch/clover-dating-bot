@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clover-dating-bot"
-version = "0.1.6"
+version = "0.1.7"
 description = "Chat-bot for dating..."
 authors = ["AnyGlitch <WhyGlitches@gmail.com>"]
 license = "MIT"

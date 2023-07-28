@@ -14,11 +14,10 @@ from source.keyboards import (
     need_sex_keyboard,
 )
 from source.messages import (
-    change_need_age_message,
-    change_need_sex_message,
+    change_filter_settings_message,
     filter_settings_message,
-    need_age_settings_message,
-    need_sex_settings_message,
+    get_need_age_settings_message,
+    get_need_sex_settings_message,
 )
 from source.states import FilterSettingsState
 
@@ -49,7 +48,10 @@ async def need_age_settings_handler(
     message: Message,
     state: FSMContext,
 ) -> None:
-    await message.answer(need_age_settings_message, reply_markup=empty_keyboard)
+    await message.answer(
+        get_need_age_settings_message,
+        reply_markup=empty_keyboard,
+    )
     await state.set_state(FilterSettingsState.CHANGE_NEED_AGE)
 
 
@@ -67,7 +69,7 @@ async def change_need_age_handler(
     sex_emoji = EmojiHelper.get_by_sex(user.need_sex)
     await UserService.update_need_age(user, new_need_age)
     await message.answer(
-        change_need_age_message,
+        change_filter_settings_message,
         reply_markup=get_filter_settings_keyboard(user.need_age, sex_emoji),
     )
     await state.clear()
@@ -82,7 +84,7 @@ async def need_sex_settings_handler(
     state: FSMContext,
 ) -> None:
     await message.answer(
-        need_sex_settings_message,
+        get_need_sex_settings_message,
         reply_markup=need_sex_keyboard,
     )
     await state.set_state(FilterSettingsState.CHANGE_NEED_SEX)
@@ -103,7 +105,7 @@ async def change_sex_handler(
     sex_emoji = EmojiHelper.get_by_sex(new_need_sex)
     await UserService.update_need_sex(user, new_need_sex)
     await message.answer(
-        change_need_sex_message,
+        change_filter_settings_message,
         reply_markup=get_filter_settings_keyboard(user.need_age, sex_emoji),
     )
     await state.clear()

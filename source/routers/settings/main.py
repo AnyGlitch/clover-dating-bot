@@ -10,18 +10,13 @@ from source.filters import UserFilter
 from source.helpers import EmojiHelper, LocationHelper
 from source.keyboards import empty_keyboard, get_main_settings_keyboard
 from source.messages import (
-    age_settings_message,
-    bio_settings_message,
-    change_age_message,
-    change_bio_message,
-    change_location_message,
-    change_location_not_found_message,
-    change_name_message,
-    change_photo_message,
-    change_sex_message,
+    change_main_settings_message,
+    get_age_settings_message,
+    get_bio_settings_message,
+    get_name_settings_message,
+    get_photo_settings_message,
+    location_validation_error_message,
     main_settings_message,
-    name_settings_message,
-    photo_settings_message,
 )
 from source.states import MainSettingsState
 
@@ -54,7 +49,7 @@ async def main_settings_handler(message: Message, user: UserModel) -> None:
 
 @main_settings_router.message(F.text.startswith("🎓"))
 async def name_settings_handler(message: Message, state: FSMContext) -> None:
-    await message.answer(name_settings_message, reply_markup=empty_keyboard)
+    await message.answer(get_name_settings_message, reply_markup=empty_keyboard)
     await state.set_state(MainSettingsState.CHANGE_NAME)
 
 
@@ -72,7 +67,7 @@ async def change_name_handler(
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
     await UserService.update_name(user, new_name)
     await message.answer(
-        change_name_message.format(name=new_name),
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,
@@ -85,7 +80,7 @@ async def change_name_handler(
 
 @main_settings_router.message(F.text == "📨Описание")
 async def bio_settings_handler(message: Message, state: FSMContext) -> None:
-    await message.answer(bio_settings_message, reply_markup=empty_keyboard)
+    await message.answer(get_bio_settings_message, reply_markup=empty_keyboard)
     await state.set_state(MainSettingsState.CHANGE_BIO)
 
 
@@ -103,7 +98,7 @@ async def change_bio_handler(
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
     await UserService.update_bio(user, new_bio)
     await message.answer(
-        change_bio_message,
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,
@@ -116,7 +111,10 @@ async def change_bio_handler(
 
 @main_settings_router.message(F.text == "🪄Фото")
 async def photo_settings_handler(message: Message, state: FSMContext) -> None:
-    await message.answer(photo_settings_message, reply_markup=empty_keyboard)
+    await message.answer(
+        get_photo_settings_message,
+        reply_markup=empty_keyboard,
+    )
     await state.set_state(MainSettingsState.CHANGE_PHOTO)
 
 
@@ -133,7 +131,7 @@ async def change_photo_handler(
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
     await UserService.update_photo(user, new_photo.file_id)
     await message.answer(
-        change_photo_message,
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,
@@ -146,7 +144,7 @@ async def change_photo_handler(
 
 @main_settings_router.message(F.text.startswith("🧸"))
 async def age_settings_handler(message: Message, state: FSMContext) -> None:
-    await message.answer(age_settings_message, reply_markup=empty_keyboard)
+    await message.answer(get_age_settings_message, reply_markup=empty_keyboard)
     await state.set_state(MainSettingsState.CHANGE_AGE)
 
 
@@ -164,7 +162,7 @@ async def change_age_handler(
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
     await UserService.update_age(user, new_age)
     await message.answer(
-        change_age_message,
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,
@@ -185,7 +183,7 @@ async def change_sex_handler(
     sex_emoji = EmojiHelper.get_by_sex(new_sex)
     await UserService.update_sex(user, new_sex)
     await message.answer(
-        change_sex_message,
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,
@@ -209,12 +207,12 @@ async def change_location_handler(
             location.longitude,
         )
     except ValidationError:
-        await message.answer(change_location_not_found_message)
+        await message.answer(location_validation_error_message)
         return
 
     await UserService.update_location(user, new_address)
     await message.answer(
-        change_location_message,
+        change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
             user.name,
             user.age,

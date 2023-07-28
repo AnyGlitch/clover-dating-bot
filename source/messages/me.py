@@ -1,6 +1,4 @@
-__all__ = ["bad_photo_message", "get_me_message"]
-
-bad_photo_message = "С твоей фотографией что-то не так, отправь мне новую:"
+__all__ = ["get_me_message"]
 
 
 def get_me_message(
