@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 __all__ = ["sign_up_router"]
 
-sign_up_router = Router(name="Sign Up Router")
+sign_up_router = Router(name=__name__)
 
 
 @sign_up_router.message(

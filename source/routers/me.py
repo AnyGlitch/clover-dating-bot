@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 __all__ = ["me_router"]
 
-me_router = Router(name="Me Router")
+me_router = Router(name=__name__)
 
 
 @me_router.message(F.text == "🙄", UserFilter())

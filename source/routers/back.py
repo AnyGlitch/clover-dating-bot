@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 __all__ = ["back_router"]
 
-back_router = Router(name="Back Router")
+back_router = Router(name=__name__)
 
 
 @back_router.message(F.text == "🔽")

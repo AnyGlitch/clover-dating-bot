@@ -2,6 +2,10 @@
 
 ## 0.1
 
+### 0.1.8
+
+- Short router names
+
 ### 0.1.7
 
 - Change messages

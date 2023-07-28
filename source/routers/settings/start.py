@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 __all__ = ["start_settings_router"]
 
-start_settings_router = Router(name="Start Settings Router")
+start_settings_router = Router(name=__name__)
 
 
 @start_settings_router.message(F.text == "⚙️")

@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 __all__ = ["main_settings_router"]
 
-main_settings_router = Router(name="Main Settings Router")
+main_settings_router = Router(name=__name__)
 
 main_settings_router.message.filter(UserFilter())
 

@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 
 __all__ = ["search_router"]
 
-search_router = Router(name="Search Router")
+search_router = Router(name=__name__)
 
 search_router.message.filter(UserFilter())
 
