@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 from aiogram import F, Router
 from aiogram.enums import ParseMode
-from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
 
 from source.database.services import ReactionService, UserService
 from source.filters import UserFilter
@@ -56,32 +55,22 @@ async def search_handler(
         Reaction.OTHER: ReactionState.OTHER,
     }
 
-    try:
-        await message.answer_photo(
-            photo=next_user.photo,
-            caption=get_me_message(
-                name=next_user.name,
-                bio=next_user.bio,
-                age=next_user.age,
-                city=next_user.city,
-            ),
-            reply_markup=get_reaction_keyboard(reaction),
-        )
-        await state.update_data(
-            receiver_id=next_user.id,
-            receiver_link=next_user.link,
-        )
-        await state.set_state(reactions_to_states[reaction])
-    except TelegramBadRequest:
-        await ReactionService.read(sender_id=next_user.id, receiver_id=user.id)
-        await ReactionService.update_or_create(
-            type_=Reaction.HATER,
-            is_read=False,
-            date=message.date,
-            sender_id=user.id,
-            receiver_id=next_user.id,
-        )
-        await search_handler(message, state, user)
+    await message.answer_photo(
+        photo=next_user.photo,
+        caption=get_me_message(
+            name=next_user.name,
+            bio=next_user.bio,
+            age=next_user.age,
+            city=next_user.city,
+        ),
+        reply_markup=get_reaction_keyboard(reaction),
+    )
+
+    await state.update_data(
+        receiver_id=next_user.id,
+        receiver_link=next_user.link,
+    )
+    await state.set_state(reactions_to_states[reaction])
 
 
 @search_router.message(ReactionState.RECIPROCITY, F.text == "❤️")
@@ -136,10 +125,7 @@ async def like_to_follower_handler(
         receiver_id=receiver_id,
     )
 
-    try:
-        await bot.send_message(receiver_id, reaction_to_user_message)
-    except TelegramForbiddenError:
-        await UserService.delete(receiver_id)
+    await bot.send_message(receiver_id, reaction_to_user_message)
 
     await message.answer(
         reaction_to_reciprocity_message.format(receiver_link=receiver_link),
@@ -198,10 +184,7 @@ async def like_to_user_handler(
         receiver_id=receiver_id,
     )
 
-    try:
-        await bot.send_message(receiver_id, reaction_to_user_message)
-    except TelegramForbiddenError:
-        await UserService.delete(receiver_id)
+    await bot.send_message(receiver_id, reaction_to_user_message)
 
     await search_handler(message, state, user)
 
@@ -256,10 +239,7 @@ async def like_to_other_handler(
     )
     await ReactionService.delete(sender_id=receiver_id, receiver_id=user.id)
 
-    try:
-        await bot.send_message(receiver_id, reaction_to_user_message)
-    except TelegramForbiddenError:
-        await UserService.delete(receiver_id)
+    await bot.send_message(receiver_id, reaction_to_user_message)
 
     await search_handler(message, state, user)
 

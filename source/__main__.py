@@ -7,8 +7,10 @@ from source.database.engine import close_orm, init_orm
 from source.routers import (
     back_router,
     filter_settings_router,
+    forbidden_error_router,
     main_settings_router,
     me_router,
+    request_error_router,
     search_router,
     sign_up_router,
     start_settings_router,
@@ -37,6 +39,8 @@ def main() -> None:
         main_settings_router,
         filter_settings_router,
         back_router,
+        forbidden_error_router,
+        request_error_router,
     )
 
     dp.run_polling(bot, allowed_updates=dp.resolve_used_update_types())

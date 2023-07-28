@@ -2,6 +2,10 @@
 
 ## 0.1
 
+### 0.1.9
+
+- Take out an error routers
+
 ### 0.1.8
 
 - Short router names
