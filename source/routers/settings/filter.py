@@ -67,7 +67,7 @@ async def change_need_age_handler(
     new_need_age: int,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.need_sex)
-    await UserService.update_need_age(user, new_need_age)
+    await UserService.update(user, need_age=new_need_age)
     await message.answer(
         change_filter_settings_message,
         reply_markup=get_filter_settings_keyboard(user.need_age, sex_emoji),
@@ -103,7 +103,7 @@ async def change_sex_handler(
 ) -> None:
     new_need_sex = EmojiHelper.get_sex(emoji[1:])
     sex_emoji = EmojiHelper.get_by_sex(new_need_sex)
-    await UserService.update_need_sex(user, new_need_sex)
+    await UserService.update(user, need_sex=new_need_sex)
     await message.answer(
         change_filter_settings_message,
         reply_markup=get_filter_settings_keyboard(user.need_age, sex_emoji),

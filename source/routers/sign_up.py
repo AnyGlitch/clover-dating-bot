@@ -145,7 +145,7 @@ async def location_handler(
         need_age=data["need_age"],
         sex=data["sex"],
         need_sex=data["need_sex"],
-        address=address,
+        **address.dict(),
     )
     await message.answer(finish_message, reply_markup=menu_keyboard)
     await state.clear()

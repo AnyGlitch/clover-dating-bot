@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypeAlias
+from typing import Any, TypeAlias
 
 from pypika import Interval, Parameter
 from tortoise.expressions import Q
 
 from source.database.models import UserModel
 from source.types import Reaction, Sex
-
-if TYPE_CHECKING:
-    from source.types import Address
 
 __all__ = ["UserService"]
 
@@ -26,7 +23,11 @@ class UserService:
         need_age: int,
         sex: Sex,
         need_sex: Sex,
-        address: Address,
+        country: str,
+        state: str,
+        city: str,
+        latitude: float,
+        longitude: float,
         bio: str | None = None,
     ) -> MODEL:
         return await MODEL.create(
@@ -38,11 +39,11 @@ class UserService:
             need_age=need_age,
             sex=sex,
             need_sex=need_sex,
-            country=address.country,
-            state=address.state,
-            city=address.city,
-            latitude=address.latitude,
-            longitude=address.longitude,
+            country=country,
+            state=state,
+            city=city,
+            latitude=latitude,
+            longitude=longitude,
         )
 
     @staticmethod
@@ -120,50 +121,10 @@ class UserService:
         ).first()
 
     @staticmethod
-    async def update_name(user: MODEL, new_name: str) -> None:
-        user.name = new_name
+    async def update(user: MODEL, **kwargs: Any) -> None:
+        await user.update_from_dict(kwargs)
         await user.save()
 
     @staticmethod
-    async def update_bio(user: MODEL, new_bio: str) -> None:
-        user.bio = new_bio
-        await user.save()
-
-    @staticmethod
-    async def update_photo(user: MODEL, new_photo: str) -> None:
-        user.photo = new_photo
-        await user.save()
-
-    @staticmethod
-    async def update_age(user: MODEL, new_age: int) -> None:
-        user.age = new_age
-        await user.save()
-
-    @staticmethod
-    async def update_sex(user: MODEL, new_sex: Sex) -> None:
-        user.sex = new_sex
-        await user.save()
-
-    @staticmethod
-    async def update_location(user: MODEL, new_address: Address) -> None:
-        user.country = new_address.country
-        user.state = new_address.state
-        user.city = new_address.city
-        user.latitude = new_address.latitude
-        user.longitude = new_address.longitude
-        await user.save()
-
-    @staticmethod
-    async def update_need_age(user: MODEL, new_need_age: int) -> None:
-        user.need_age = new_need_age
-        await user.save()
-
-    @staticmethod
-    async def update_need_sex(user: MODEL, new_need_sex: Sex) -> None:
-        user.need_sex = new_need_sex
-        await user.save()
-
-    @staticmethod
-    async def delete(pk: int) -> None:
-        user = await MODEL.get(id=pk)
+    async def delete(user: MODEL) -> None:
         await user.delete()

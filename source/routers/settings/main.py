@@ -65,7 +65,7 @@ async def change_name_handler(
     new_name: str,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
-    await UserService.update_name(user, new_name)
+    await UserService.update(user, name=new_name)
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
@@ -96,7 +96,7 @@ async def change_bio_handler(
     new_bio: str,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
-    await UserService.update_bio(user, new_bio)
+    await UserService.update(user, bio=new_bio)
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
@@ -129,7 +129,7 @@ async def change_photo_handler(
     new_photo: PhotoSize,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
-    await UserService.update_photo(user, new_photo.file_id)
+    await UserService.update(user, photo=new_photo.file_id)
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
@@ -160,7 +160,7 @@ async def change_age_handler(
     new_age: int,
 ) -> None:
     sex_emoji = EmojiHelper.get_by_sex(user.sex)
-    await UserService.update_age(user, new_age)
+    await UserService.update(user, age=new_age)
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
@@ -181,7 +181,7 @@ async def change_sex_handler(
 ) -> None:
     new_sex = EmojiHelper.get_opposite_sex(emoji)
     sex_emoji = EmojiHelper.get_by_sex(new_sex)
-    await UserService.update_sex(user, new_sex)
+    await UserService.update(user, sex=new_sex)
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
@@ -210,7 +210,7 @@ async def change_location_handler(
         await message.answer(location_validation_error_message)
         return
 
-    await UserService.update_location(user, new_address)
+    await UserService.update(user, **new_address.dict())
     await message.answer(
         change_main_settings_message,
         reply_markup=get_main_settings_keyboard(
